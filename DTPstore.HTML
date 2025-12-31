@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>DTPstore — Top Up Game & E-Wallet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --primary:#22d3ee;
+  --accent:#22c55e;
+  --dark:#020617;
+  --glass:rgba(15,23,42,.78);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Segoe UI',system-ui;
+  background:
+    radial-gradient(circle at top,#38bdf8 0%,transparent 40%),
+    linear-gradient(180deg,#020617,#020617);
+  color:#fff;
+  min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+header{
+  padding:40px 20px;
+  text-align:center;
+  animation:fadeDown 1s ease;
+}
+
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-20px)} 
+  to{opacity:1;transform:translateY(0)}
+}
+
+.logo{
+  font-size:36px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.logo span{
+  color:var(--primary);
+  text-shadow:0 0 20px var(--primary);
+}
+
+header p{
+  margin-top:10px;
+  font-size:14px;
+  opacity:.85;
+}
+
+.badge{
+  display:inline-block;
+  margin-top:12px;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--accent),#4ade80);
+  color:#020617;
+  animation:float 2.5s ease-in-out infinite;
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+/* ================= CARD ================= */
+.container{
+  max-width:440px;
+  margin:auto;
+  padding:0 15px;
+}
+
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+  border-radius:26px;
+  padding:28px;
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,.1);
+  transition:.45s cubic-bezier(.2,.8,.2,1);
+  animation:fadeUp .9s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.015);
+  box-shadow:0 25px 60px rgba(34,211,238,.18);
+}
+
+h2{margin:0 0 16px;font-size:20px}
+
+/* ================= FORM ================= */
+.field{margin-top:14px}
+
+label{font-size:13px;opacity:.85}
+
+select,input{
+  width:100%;
+  margin-top:8px;
+  padding:15px;
+  border-radius:16px;
+  background:#020617;
+  border:1px solid #1e293b;
+  color:white;
+  font-size:15px;
+  transition:.35s ease;
+}
+
+select:focus,input:focus{
+  border-color:var(--primary);
+  outline:none;
+  transform:scale(1.04);
+  box-shadow:0 0 25px rgba(34,211,238,.4);
+}
+
+/* ================= PRICE ================= */
+.price{
+  margin-top:20px;
+  padding:18px;
+  border-radius:16px;
+  background:#020617;
+  text-align:center;
+  font-size:20px;
+  font-weight:800;
+  color:var(--accent);
+  animation:pulse 1.6s infinite alternate;
+}
+
+@keyframes pulse{
+  from{box-shadow:0 0 0 rgba(34,197,94,0)}
+  to{box-shadow:0 0 30px rgba(34,197,94,.55)}
+}
+
+/* ================= SUMMARY ================= */
+.summary{
+  margin-top:18px;
+  padding:16px;
+  border-radius:16px;
+  background:#020617;
+  font-size:14px;
+  line-height:1.6;
+  border:1px dashed var(--primary);
+  transition:.3s;
+}
+
+/* ================= BUTTON ================= */
+button{
+  width:100%;
+  margin-top:22px;
+  padding:18px;
+  border:none;
+  border-radius:20px;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  color:#020617;
+  background:linear-gradient(135deg,var(--accent),#4ade80);
+  position:relative;
+  overflow:hidden;
+}
+
+button::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:0;
+  height:0;
+  background:rgba(255,255,255,.4);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+
+button:active::after{
+  width:320px;
+  height:320px;
+  transition:.6s;
+}
+
+/* ================= EFFECTS ================= */
+.success{
+  animation:success .6s ease;
+  box-shadow:0 0 45px rgba(34,197,94,.6)!important;
+}
+
+@keyframes success{
+  0%{transform:scale(.9)}
+  50%{transform:scale(1.06)}
+  100%{transform:scale(1)}
+}
+
+.shake{
+  animation:shake .3s;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  75%{transform:translateX(6px)}
+}
+
+.loader{
+  display:none;
+  text-align:center;
+  margin-top:18px;
+  font-size:13px;
+  opacity:.8;
+  animation:blink 1.2s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:.3}
+}
+
+footer{
+  text-align:center;
+  font-size:12px;
+  opacity:.6;
+  padding:30px 15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- === HTML ASLI KAMU (TIDAK DIUBAH) === -->
+<header>
+  <div class="logo">⚡ <span>DTP</span>store</div>
+  <p>Top Up Game & E-Wallet • Cepat • Aman • Terpercaya</p>
+  <div class="badge">AUTO PROCESS • 24 JAM</div>
+</header>
+
+<div class="container">
+<div class="card">
+<h2>🛒 Top Up</h2>
+
+<div class="field">
+<label>Produk</label>
+<select id="product" onchange="loadNominal();updateInput();updateSummary();">
+  <option value="">Pilih Game / E-Wallet</option>
+  <option value="ml">Mobile Legends</option>
+  <option value="ff">Free Fire</option>
+  <option value="roblox">Roblox</option>
+  <option value="genshin">Genshin Impact</option>
+<option value="codm">Call of Duty Mobile</option>
+<option value="arenabreakout">Arena Breakout</option>
+<option value="msw">Marvel Super War</option>
+<option value="hago">Hago</option>
+  <option value="pubg">PUBG Mobile</option>
+  <option value="dana">DANA</option>
+  <option value="ovo">OVO</option>
+  <option value="gopay">GoPay</option>
+  <option value="shopee">ShopeePay</option>
+<option value="linkaja">LinkAja</option>
+</select>
+</div>
+
+<div class="field">
+<label id="userLabel">ID Game / Username</label>
+<input id="userid" oninput="updateSummary()" placeholder="Masukkan ID">
+</div>
+
+<div class="field">
+<label>Nominal</label>
+<select id="nominal" onchange="showPrice();updateSummary()">
+  <option value="">Pilih Nominal</option>
+</select>
+</div>
+
+<div class="price" id="priceDisplay">Harga: -</div>
+
+<div class="summary" id="summary">
+<b>Ringkasan</b><br>
+Produk: -<br>
+ID / No: -<br>
+Nominal: -
+</div>
+
+<button onclick="orderNow()">PROSES SEKARANG</button>
+<div class="loader" id="loader">⏳ Menghubungkan ke WhatsApp…</div>
+</div>
+
+<div class="card">
+<h2>ℹ️ Tentang Kami</h2>
+DTPstore menyediakan layanan top up termurah dengan proses kilat.
+</div>
+
+<div class="card">
+<h2>📞 Kontak</h2>
+WhatsApp: 0822-5765-6822
+</div>
+</div>
+
+<footer>© 2025 DTPstore — Power Up Your Game</footer>
+
+<script>
+/* === SCRIPT ASLI + ENHANCEMENT TANPA DIKURANGI === */
+
+const ewallets=["dana","ovo","gopay","shopee","linkaja"];
+const data = {
+
+ml:{
+"5 Diamonds":1500,
+"12 (11+1) Diamonds":3500,
+"19 (17+2) Diamonds":5000,
+"28 Diamonds":8000,
+"36 (33+3) Diamonds":10000,
+"44 (40+4) Diamonds":12305,
+"56 (51+5) Diamonds":15500,
+"74 (69+5) Diamonds":21000,
+"86 (78+8) Diamonds":22000,
+"100 Diamonds":28000,
+"112 (102+10) Diamonds": 32000,
+"144 (130+14) Diamonds": 41000,
+"170 (154+16) Diamonds": 48000,
+"185 (167+18) Diamonds": 51000,
+ "222 (200+22) Diamonds": 61000,
+"229 (207+22) Diamonds": 64000,
+"240 (217+23) Diamonds": 67000,
+"257 (234+23) Diamonds": 70000,
+"264 Diamonds": 72000,
+"278 (251+27) Diamonds": 76000,
+"284 (254+30) Diamonds": 79000,
+"296 (256+40) Diamonds": 81000,
+"301 (261+40) Diamonds": 84000,
+"344 (312+32) Diamonds": 94000,
+"345 (301+44) Diamonds": 97000,
+"355 (309+46) Diamonds": 99000,
+    "370 (333+37) Diamonds": 105000,
+    "374 (326+48) Diamonds": 107000,
+    "381 (333+48) Diamonds": 109000,
+    "408 (367+41) Diamonds": 113000,
+    "425 (373+52) Diamonds": 118000,
+    "429 (390+39) Diamonds": 117000,
+    "448 Diamonds": 135000,
+    "460 Diamonds": 138000,
+    "500 Diamonds": 145000,
+    "512 (461+51) Diamonds": 142000,
+    "514 (468+46) Diamonds": 140000,
+    "518 Diamonds": 146000,
+    "522 (471+51) Diamonds": 145000,
+    "568 (503+65) Diamonds": 152000,
+    "600 (568+32) Diamonds": 162000,
+    "601 (533+68) Diamonds": 165000,
+    "642 Diamonds": 178000,
+    "706 (625+81) Diamonds": 190000,
+    "712 (633+79) Diamonds": 193000,
+    "717 (638+79) Diamonds": 195000,
+    "875 (774+101) Diamonds": 226000,
+    "963 (859+104) Diamonds": 255000,
+    "965 (856+109) Diamonds": 258000,
+    "977 (867+110) Diamonds": 260000,
+    "1050 (937+113) Diamonds": 278000,
+    "1134 (1008+126) Diamonds": 300000,
+    "1136 (1006+130) Diamonds": 298000,
+    "1139 (1013+126) Diamonds": 302000,
+    "1159 (1031+128) Diamonds": 305000,
+    "1164 (1036+128) Diamonds": 308000,
+    "1183 (1041+142) Diamonds": 312000,
+    "1220 (1159+61) Diamonds": 320000,
+    "1230 (1083+147) Diamonds": 325000,
+    "1368 (1218+150) Diamonds": 355000,
+    "1412 (1250+162) Diamonds": 368000,
+    "1443 (1277+166) Diamonds": 379000,
+    "1453 (1295+158) Diamonds": 385000,
+    "1507 (1335+172) Diamonds": 398000,
+    "1672 (1484+188) Diamonds": 440000,
+    "1704 (1509+195) Diamonds": 450000,
+    "1750 (1548+202) Diamonds": 458000,
+    "2010 (1708+302) Diamonds": 495000,
+    "2180 (1862+318) Diamonds": 540000,
+    "2195 (1860+335) Diamonds": 545000,
+    "2199 (1879+320) Diamonds": 548000,
+    "2350 (2017+333) Diamonds": 585000,
+    "2382 (2033+349) Diamonds": 595000,
+    "2536 (2182+354) Diamonds": 620000,
+    "2578 (2211+367) Diamonds": 635000
+},
+
+ff:{
+ "5 Diamonds":1500,
+ "12 Diamonds":2300,
+ "50 Diamonds":9000,
+ "70 Diamonds":11000,
+ "100 Diamonds":14000,
+ "140 Diamonds":22000,
+ "210 Diamonds":29000,
+ "300 Diamonds":40000,
+ "355 Diamonds":47500,
+ "500 Diamonds":65000,
+ "720 Diamonds":92500,
+ "1000 Diamonds":130000
+},
+
+roblox:{
+ "Roblox Gift Card IDR 50.000":52000,
+ "Roblox Gift Card IDR 65.000":68000,
+ "Roblox Gift Card IDR 100.000":95000,
+ "Roblox Gift Card IDR 200.000":192000,
+ "Roblox Gift Card IDR 300.000":285000,
+ "Roblox Gift Card IDR 500.000":485000
+},
+
+genshin:{
+ "60 Genesis Crystals":12000,
+ "300+30 Genesis Crystals":60000,
+ "980+110 Genesis Crystals":185000,
+ "1980+260 Genesis Crystals":397000,
+ "3280+600 Genesis Crystals":620000
+},
+
+pubg:{
+ "15 UC":8000,
+ "25 UC":9000,
+ "35 UC":15000,
+ "60 UC":17000,
+ "100 UC":29000,
+ "200 UC":58000,
+ "250 UC":73000,
+ "300 UC":75000,
+ "350 UC":89000,
+ "500 UC":119000,
+ "700 UC":162800,
+ "1000 UC":320500
+},
+
+codm:{
+ "31 CP":5750,
+ "62 CP":10000,
+ "127 CP":20000,
+ "327 CP":45000,
+ "634 CP":95000,
+ "1373 CP":215000
+},
+
+arenabreakout:{
+ "60 Bonds":15000,
+ "310 Bonds":72000,
+ "630 Bonds":143000,
+ "1580 Bonds":347000,
+ "3200 Bonds":395000
+},
+
+msw:{
+ "55 Star Credit":15000,
+ "275 Star Credit":75000,
+ "565 Star Credit":150000
+},
+
+hago:{
+ "5 Diamonds Hago":2106,
+ "10 Diamonds Hago":3500,
+ "20 Diamonds Hago":6200,
+ "30 Diamonds Hago":9350,
+ "35 Diamonds Hago":11000,
+ "40 Diamonds Hago":12600,
+ "50 Diamonds Hago":15120,
+ "75 Diamonds Hago":23139,
+ "80 Diamonds Hago":25200,
+ "100 Diamonds Hago":30000,
+ "200 Diamonds Hago":62000,
+ "250 Diamonds Hago":74500,
+ "400 Diamonds Hago":119609,
+ "500 Diamonds Hago":150000
+},
+
+dana:{
+ "1.000":1500,
+ "2.000":2500,
+ "3.000":3500,
+ "4.000":4500,
+ "5.000":5500,
+ "10.000":12000,
+ "15.000":17000,
+ "20.000":22000,
+ "25.000":27000,
+ "30.000":32000,
+ "35.000":37000,
+ "40.000":42000,
+ "45.000":47000,
+ "50.000":52000,
+ "100.000":102000,
+ "150.000":152000,
+ "200.000":202000
+},
+
+gopay:{
+ "1.000":1500,
+ "2.000":2500,
+ "3.000":3500,
+ "4.000":4500,
+ "5.000":5500,
+ "10.000":12000,
+ "15.000":17000,
+ "20.000":22000,
+ "25.000":27000,
+ "30.000":32000,
+ "35.000":37000,
+ "40.000":42000,
+ "45.000":47000,
+ "50.000":52000,
+ "100.000":102000,
+ "150.000":152000,
+ "200.000":202000
+},
+
+ovo:{
+ "10.000":12000,
+ "15.000":17000,
+ "20.000":22000,
+ "25.000":27000,
+ "30.000":32000,
+ "35.000":37000,
+ "40.000":42000,
+ "45.000":47000,
+ "50.000":52000,
+ "100.000":102000,
+ "150.000":152000,
+ "200.000":202000
+},
+
+shopee:{
+ "10.000":12000,
+ "15.000":17000,
+ "20.000":22000,
+ "25.000":27000,
+ "30.000":32000,
+ "35.000":37000,
+ "40.000":42000,
+ "45.000":47000,
+ "50.000":52000,
+ "100.000":102000,
+ "150.000":152000,
+ "200.000":202000
+},
+
+linkaja:{
+ "10.000":12000,
+ "15.000":17000,
+ "20.000":22000,
+ "25.000":27000,
+ "30.000":32000,
+ "35.000":37000,
+ "40.000":42000,
+ "45.000":47000,
+ "50.000":52000,
+ "100.000":102000,
+ "150.000":152000,
+ "200.000":202000
+}
+};
+const productNames={
+  ml:"Mobile Legends",
+  ff:"Free Fire",
+  roblox:"Roblox",
+  genshin:"Genshin Impact",
+  pubg:"PUBG Mobile",
+  dana:"DANA",
+  ovo:"OVO",
+  gopay:"GoPay",
+  shopee:"ShopeePay",
+  linkaja:"LinkAja",
+  codm:"Call of Duty Mobile",
+  arenabreakout:"Arena Breakout",
+  msw:"Marvel Super War",
+  hago:"Hago"
+};
+
+const product=document.getElementById("product");
+const nominal=document.getElementById("nominal");
+const userid=document.getElementById("userid");
+const userLabel=document.getElementById("userLabel");
+const priceDisplay=document.getElementById("priceDisplay");
+const summary=document.getElementById("summary");
+const loader=document.getElementById("loader");
+const card=document.querySelector(".card");
+
+function updateInput(){
+  if(ewallets.includes(product.value)){
+    userLabel.innerText="No E-Wallet";
+    userid.type="tel";
+    userid.placeholder="Contoh: 08123456789";
+  }else{
+    userLabel.innerText="ID Game / Username";
+    userid.type="text";
+    userid.placeholder="Masukkan ID (Server)";
+  }
+  userid.value="";
+}
+
+function loadNominal(){
+  nominal.innerHTML='<option value="">Pilih Nominal</option>';
+  if(data[product.value]){
+    for(let x in data[product.value]){
+      let opt=document.createElement("option");
+      opt.value=x;
+      opt.innerHTML=x;
+      nominal.appendChild(opt);
+    }
+  }
+  priceDisplay.innerText="Harga: -";
+  card.classList.add("success");
+  setTimeout(()=>card.classList.remove("success"),500);
+}
+
+function showPrice(){
+  if(product.value && nominal.value){
+    const h=data[product.value][nominal.value];
+    priceDisplay.innerText="Harga: Rp "+h.toLocaleString("id-ID");
+    priceDisplay.classList.add("success");
+    setTimeout(()=>priceDisplay.classList.remove("success"),500);
+  }
+}
+
+function updateSummary(){
+  summary.innerHTML=`<b>Ringkasan</b><br>
+  Produk: ${productNames[product.value]||"-"}<br>
+  ID / No: ${userid.value||"-"}<br>
+  Nominal: ${nominal.value||"-"}`;
+}
+
+function orderNow(){
+  if(!product.value||!nominal.value||!userid.value){
+    card.classList.add("shake");
+    setTimeout(()=>card.classList.remove("shake"),300);
+    alert("Harap lengkapi Produk, ID, dan Nominal!");
+    return;
+  }
+
+  loader.style.display="block";
+  card.classList.add("success");
+
+  setTimeout(()=>{
+    const msg=`Halo DTPstore, saya mau order:
+Produk: ${productNames[product.value]}
+ID/No: ${userid.value}
+Nominal: ${nominal.value}
+${priceDisplay.innerText}`;
+    window.open("https://wa.me/6282257656822?text="+encodeURIComponent(msg),"_blank");
+    loader.style.display="none";
+  },900);
+}
+</script>
+<!-- ================= FINAL GOD MODE ADDON ================= -->
+
+<!-- 🎬 CINEMATIC OPENING -->
+<div id="cinematic">
+  <div class="cin-logo">⚡ DTPstore</div>
+  <div class="cin-sub">Auto Process • Fast • Trusted</div>
+</div>
+
+<style>
+#cinematic{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#38bdf8,#020617 70%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  animation:cinOut 2.8s forwards;
+}
+
+.cin-logo{
+  font-size:44px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-shadow:0 0 30px #22d3ee;
+  animation:cinZoom 1.4s ease;
+}
+
+.cin-sub{
+  margin-top:12px;
+  font-size:14px;
+  opacity:.85;
+  animation:fadeUp .9s ease .4s both;
+}
+
+@keyframes cinZoom{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+@keyframes cinOut{
+  0%,70%{opacity:1}
+  100%{opacity:0;pointer-events:none}
+}
+</style>
+
+<!-- 🔊 SOUND FX -->
+<audio id="clickSound" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-modern-click-box-check-1120.mp3">
+</audio>
+
+<audio id="successSound" preload="auto">
+  <source src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3">
+</audio>
+
+<!-- 🎉 CONFETTI -->
+<script>
+function confettiBurst(){
+  for(let i=0;i<40;i++){
+    const c=document.createElement("div");
+    c.style.position="fixed";
+    c.style.width="6px";
+    c.style.height="6px";
+    c.style.background=Math.random()>0.5?"#22d3ee":"#22c55e";
+    c.style.left="50%";
+    c.style.top="50%";
+    c.style.borderRadius="50%";
+    c.style.zIndex=9999;
+    document.body.appendChild(c);
+
+    const x=(Math.random()-0.5)*300;
+    const y=(Math.random()-0.5)*300;
+
+    c.animate([
+      {transform:"translate(0,0)",opacity:1},
+      {transform:`translate(${x}px,${y}px)`,opacity:0}
+    ],{duration:900,easing:"ease-out"});
+
+    setTimeout(()=>c.remove(),900);
+  }
+}
+</script>
+
+<!-- 🧠 AUTO TRUST + BUTTON ENHANCE -->
+<script>
+document.querySelectorAll("button, select, input").forEach(el=>{
+  el.addEventListener("click",()=>{
+    document.getElementById("clickSound").play().catch(()=>{});
+  });
+});
+
+const oldOrder=orderNow;
+orderNow=function(){
+  oldOrder();
+  document.getElementById("successSound").play().catch(()=>{});
+  confettiBurst();
+};
+</script>
+<!-- ================= UX DEWA: ANIMASI PEMILIHAN ================= -->
+
+<style>
+/* === SELECT TRANSFORM === */
+select{
+  cursor:pointer;
+  background-image:
+    linear-gradient(135deg,rgba(34,211,238,.25),transparent 60%);
+}
+
+select option{
+  background:#020617;
+  color:#fff;
+}
+
+/* === ACTIVE SELECTION GLOW === */
+.select-activated{
+  animation:selectPulse .55s ease;
+  box-shadow:0 0 30px rgba(34,211,238,.6)!important;
+}
+
+@keyframes selectPulse{
+  0%{transform:scale(.96)}
+  60%{transform:scale(1.06)}
+  100%{transform:scale(1)}
+}
+
+/* === NOMINAL LIST POP EFFECT === */
+.nominal-pop option{
+  animation:popIn .35s ease both;
+}
+
+@keyframes popIn{
+  from{opacity:0;transform:translateX(-8px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+/* === HOVER FEEL PREMIUM === */
+select:hover{
+  box-shadow:0 0 22px rgba(34,211,238,.35);
+}
+
+/* === SUMMARY HIGHLIGHT === */
+.summary.highlight{
+  animation:summaryFlash .6s ease;
+}
+
+@keyframes summaryFlash{
+  0%{box-shadow:0 0 0 rgba(34,211,238,0)}
+  50%{box-shadow:0 0 30px rgba(34,211,238,.6)}
+  100%{box-shadow:0 0 0 rgba(34,211,238,0)}
+}
+</style>
+
+<script>
+/* === SELECT INTERACTION ENGINE (PURE ADDON) === */
+
+// Produk dipilih → efek aktif
+product.addEventListener("change",()=>{
+  product.classList.add("select-activated");
+  setTimeout(()=>product.classList.remove("select-activated"),500);
+});
+
+// Nominal dipilih → efek aktif + highlight summary
+nominal.addEventListener("change",()=>{
+  nominal.classList.add("select-activated");
+  summary.classList.add("highlight");
+  setTimeout(()=>{
+    nominal.classList.remove("select-activated");
+    summary.classList.remove("highlight");
+  },500);
+});
+
+// Saat nominal di-load → animasi pop satu-satu
+const oldLoadNominal = loadNominal;
+loadNominal = function(){
+  oldLoadNominal();
+  nominal.classList.add("nominal-pop");
+  setTimeout(()=>nominal.classList.remove("nominal-pop"),600);
+};
+
+// Input ID diketik → summary hidup
+userid.addEventListener("input",()=>{
+  summary.classList.add("highlight");
+  setTimeout(()=>summary.classList.remove("highlight"),350);
+});
+</script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <style>
+    .info-pembelian {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #1a1a1a;
+      background-color: #f2f8ff;
+      border-left: 5px solid #007bff;
+      padding: 12px 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+
+    .info-pembelian strong {
+      color: #007bff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="info-pembelian">
+    <strong>Informasi Penting:</strong>
+    <ul style="margin:8px 0 0 18px; padding:0;">
+      <li>Pembelian dapat dilakukan lebih dari 1 (satu) unit dengan batas maksimal 3 (tiga) unit dalam satu transaksi.</li>
+      <li>Saat melakukan transaksi, pembeli tidak diperkenankan mengubah ringkasan pemesanan atau transaksi akan dibatalkan.</li>
+    </ul>
+  </div>
+
+</body>
+</html>
+
+</body>
+</html>
